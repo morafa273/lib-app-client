@@ -1,9 +1,9 @@
-import axios from 'axios'
+// import axios from 'axios'
 
-const API = 'http://localhost:5000';
+// const API = 'http://localhost:5000/';
 
-export default {
-    getAllBooks: () => {
-        axios.get(`${API}/books`);
-    } 
-}
+// export default {
+//     getAllBooks: () => {
+//         axios.get(`${API}books`);
+//     } 
+// }

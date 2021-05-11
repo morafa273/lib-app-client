@@ -1,8 +1,8 @@
 import './App.css';
-import React,{useEffect,useState} from 'react';
-import {Books,Users,Transaksi} from './pages';
+import React from 'react';
+import {Books,Users,Transaksi,AddBook, EditBook} from './pages';
 import {Nav} from './layout';
-import service from './service'
+//import service from './service'
 import {
   BrowserRouter as Router,
   Switch,
@@ -10,12 +10,20 @@ import {
 } from "react-router-dom";
 
 
-function App() {
+
+function App({props}) {
 
   return (
+
     <Router>
       <Nav/>
       <Switch>
+        <Route path="/editbook">
+          <EditBook/>
+        </Route>
+        <Route path="/addbook">
+          <AddBook/>
+        </Route>
         <Route path="/transaksi">
           <Transaksi />
         </Route>
@@ -23,7 +31,7 @@ function App() {
           <Users />
         </Route>
         <Route path="/">
-          <Books  />
+          <Books />
         </Route>
       </Switch>
     </Router>

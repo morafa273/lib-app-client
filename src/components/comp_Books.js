@@ -1,6 +1,6 @@
 import React from 'react';
 
-const bookItems = ({id,judulBuku,pengarang,stok,hargasewa}) => {
+const bookItems = () => {
     return (
         <Layout>
         <div class="mt-2">
@@ -20,10 +20,10 @@ const bookItems = ({id,judulBuku,pengarang,stok,hargasewa}) => {
             <tbody>
                 <tr>
                     
-                    <td>Sample judul</td>
-                    <td>Sample pengarang</td>
-                    <td>10</td>
-                    <td>5000</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td>
                     <button type="button" class="btn btn-success me-md-2">Edit</button>
                     <button type="button" class="btn btn-danger">Delete</button>
@@ -34,3 +34,5 @@ const bookItems = ({id,judulBuku,pengarang,stok,hargasewa}) => {
     </Layout>
     );
 }
+
+export default bookItems;

@@ -1,41 +1,51 @@
-import React,{Component,useState,useEffect} from 'react';
+import React,{useState,useEffect} from 'react';
 import {Layout} from '../layout';
-import service from '../service'
+import {Link} from 'react-router-dom'
+//import service from '../service'
 //import axio from 'axio'
 //import {Table,Button} from 'reactstrap'
 
 
-const Books = ({judulBuku,pengarang,stok,hargasewa}) => {
-    
-    const [books,setBooks] = useState(null);
+const Books = ({props}) => {
 
-  const retBooks = async () => {
-    try{
-        const resp = await service.getAllBooks();
-        setBooks(resp.data);
-    }catch(error){
-      console.log(error);
-    }
-  } 
+  const [books,setBooks] = useState([]);
 
   useEffect(()=>{
-      retBooks();
+    fetch('http://localhost:5000/books')
+  .then((res)=> res.json())
+  .then(json => {
+    console.log(json);
+    setBooks(json);
+  });
   },[])
 
-  if(!books){
-    return (
-      <div class="container">Loading...</div>
-    )
-  }
+  // data test
+  // const books = [
+  //   {
+  //     judulBuku : "Harry Potter I",
+  //     pengarang : "JK.Rowling",
+  //     stok : 3,
+  //     hargasewa : 9500
+  //   },
+  //   {
+  //     judulBuku : "Harry Potter II",
+  //     pengarang : "JK.Rowling",
+  //     stok : 4,
+  //     hargasewa : 10000
+  //   }
+  // ]
 
   return(
     <Layout>
     <div class="mt-2">
-    <button type="button" class="btn btn-primary">+ Add Book</button>
+    <Link to="/addbook">
+          <button type="button" class="btn btn-primary">+ Add Book</button>
+    </Link>
     </div>
     <table class="table mt-1">
         <thead>
             <tr>
+                <th>#</th>
                 <th>Judul Buku</th>
                 <th>Pengarang</th>
                 <th>Stok</th>
@@ -44,16 +54,23 @@ const Books = ({judulBuku,pengarang,stok,hargasewa}) => {
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>{judulBuku}</td>
-                <td>{pengarang}</td>
-                <td>{stok}</td>
-                <td>{hargasewa}</td>
-                <td>
-                <button type="button" class="btn btn-success me-md-2">Edit</button>
+        { (books.length > 0) ? books.map( (book, index) => {
+           return (
+            <tr key={ index }>
+              <td>{index+1}</td>
+              <td>{ book.judulBuku }</td>
+              <td>{ book.pengarang }</td>
+              <td>{ book.stok}</td>
+              <td>{ book.hargasewa }</td>
+              <td>
+                <Link to='/editbook'>
+                  <button type="button" class="btn btn-success me-md-2">Edit</button>
+                </Link>
                 <button type="button" class="btn btn-danger">Delete</button>
                 </td>
             </tr>
+          )
+         }) : <tr><td colSpan="5">Loading...</td></tr> }
         </tbody>
     </table>
     </Layout>
