@@ -1,6 +1,6 @@
 import './App.css';
 import React from 'react';
-import {Books,Users,Transaksi,AddBook, EditBook} from './pages';
+import {Books,Users,Transaksi,AddBook, EditBook,DetilTrans} from './pages';
 import {Nav} from './layout';
 //import service from './service'
 import {
@@ -8,16 +8,27 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
+import AddUser from './pages/AddUser';
+import EditUser from './pages/EditUser';
 
 
 
-function App({props}) {
+function App() {
 
   return (
 
     <Router>
       <Nav/>
       <Switch>
+        <Route path='/edituser'>
+            <EditUser/>
+        </Route>
+        <Route path='/adduser'>
+            <AddUser/>
+        </Route>
+        <Route path="/detiltrans">
+            <DetilTrans/>
+        </Route>
         <Route path="/editbook">
           <EditBook/>
         </Route>

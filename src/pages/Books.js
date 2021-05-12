@@ -1,23 +1,27 @@
 import React,{useState,useEffect} from 'react';
 import {Layout} from '../layout';
-import {Link} from 'react-router-dom'
+import {Link,useHistory,useParams} from 'react-router-dom'
 //import service from '../service'
-//import axio from 'axio'
+import axios from 'axios';
 //import {Table,Button} from 'reactstrap'
 
 
-const Books = ({props}) => {
+const Books = () => {
+
+  const url = 'http://localhost:5000/books';
 
   const [books,setBooks] = useState([]);
 
   useEffect(()=>{
-    fetch('http://localhost:5000/books')
+    fetch(url)
   .then((res)=> res.json())
   .then(json => {
     console.log(json);
     setBooks(json);
   });
   },[])
+
+  
 
   // data test
   // const books = [
@@ -35,6 +39,15 @@ const Books = ({props}) => {
   //   }
   // ]
 
+  function deleteBook(id){
+    if(window.confirm('Hapus Data Buku ?')){
+        axios.delete(url+'/'+id);
+        window.location.reload();
+      }
+  }
+
+  
+
   return(
     <Layout>
     <div class="mt-2">
@@ -42,7 +55,7 @@ const Books = ({props}) => {
           <button type="button" class="btn btn-primary">+ Add Book</button>
     </Link>
     </div>
-    <table class="table mt-1">
+    <table class="table table-striped mt-1">
         <thead>
             <tr>
                 <th>#</th>
@@ -63,10 +76,12 @@ const Books = ({props}) => {
               <td>{ book.stok}</td>
               <td>{ book.hargasewa }</td>
               <td>
-                <Link to='/editbook'>
+               <Link to={{pathname:'/editbook',state: book.id}}>
                   <button type="button" class="btn btn-success me-md-2">Edit</button>
-                </Link>
-                <button type="button" class="btn btn-danger">Delete</button>
+               </Link>
+                
+              
+                <button onClick={()=> deleteBook(book.id)} type="button" class="btn btn-danger">Delete</button>
                 </td>
             </tr>
           )
