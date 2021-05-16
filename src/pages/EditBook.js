@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react'
-import { Redirect, useLocation } from 'react-router';
+import { useLocation } from 'react-router';
 import { Layout } from '../layout';
 import {Link} from 'react-router-dom'
 import Axios from 'axios'

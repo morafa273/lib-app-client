@@ -1,10 +1,13 @@
 import React,{useEffect,useState} from 'react'
-import {useLocation} from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
 import { Layout } from '../layout';
+import moment from 'moment';
+import Axios from 'axios'
 
 
 const DetilTrans = () => {
     const [users,setUsers] = useState([]);
+    const [total,setTotal] = useState(0);
 
     useEffect(()=>{
         fetch('http://localhost:5000/users')
@@ -15,11 +18,13 @@ const DetilTrans = () => {
     });
     },[])
     const location = useLocation()
-    const idBuku = location.state
+    const dataBuku = location.state
+    //console.log('ini adalah data : '+dataBuku.hargasewa);
+
 
     const [sewa,setSewa] = useState({
         idUser : "",
-        idBuku : idBuku,
+        idBuku : dataBuku.id,
         tanggalKembali : "",
         totalBiaya : ""
     });
@@ -31,14 +36,51 @@ const DetilTrans = () => {
         console.log(newdata);
     }
 
+    function hitungTotal(e){
+        e.preventDefault();
+        const today = moment(new Date());
+        const date2 = moment(new Date(sewa.tanggalKembali));
+        const diff = date2.diff(today);
+        const diffDuration = moment.duration(diff);
+        const selisihHari = diffDuration.days()+1;
+        console.log(selisihHari);
+        const jumlah = selisihHari * dataBuku.hargasewa;
+        setTotal(jumlah)
+        sewa.totalBiaya = jumlah;
+        console.log(sewa.totalBiaya);
+    }
+
+    function submit(e){
+        if(sewa.idUser==="" || sewa.idBuku==="" || sewa.tanggalKembali==="" || sewa.totalBiaya===""){
+             alert('Data transaksi tidak lengkap!');
+        }else{
+         e.preventDefault();
+         Axios.post('http://localhost:5000/rents',{
+             idUser : sewa.idUser,
+             idBuku : sewa.idBuku,
+             tanggalKembali : sewa.tanggalKembali,
+             totalBiaya : sewa.totalBiaya
+         }).then(res=>{
+             console.log(res.sewa);
+         })
+         const newStok = dataBuku.stok - 1
+         Axios.patch('http://localhost:5000/books/'+dataBuku.id,{
+            stok : newStok
+      }).then(res=>{
+          console.log(res.val);
+      })
+         alert('Data Transaksi Telah Ditambahkan')
+        }
+     }
+
     return(
         <Layout>
             <div class="mt-3">
-            <h2>Pilih Nama User : </h2>    
-            <select class="form-select" multiple aria-label="multiple select example">
+            <h2>Masukkan ID User : </h2>    
+            <select class="form-select" multiple aria-label="multiple select example" onChange={(e)=>onHandler(e)} id="idUser">
                 {
                     users.map((user,index)=>(
-                        <option key={index}>{user.userName}</option>
+                        <option key={index}>{user.id}</option>
                     ))
                 }
             </select>
@@ -46,12 +88,14 @@ const DetilTrans = () => {
             <input  onChange={(e)=>onHandler(e)} id="tanggalKembali" type="date"/>
             <br/>
             <div class="mt-3">
-            <button  type="button" class="btn btn-primary">Hitung Biaya</button>
-            <input onChange={(e)=>onHandler(e)} class="form-control mt-3" id="disabledInput" type="text" placeholder="total" disabled />
+            <button  type="button" class="btn btn-primary" onClick={(e)=>hitungTotal(e)} value={sewa.tanggalKembali}>Hitung Biaya</button>
+            <input onChange={(e)=>onHandler(e)} id="totalBiaya" class="form-control mt-3"  type="text" placeholder="total" value={total} disabled />
             </div>
             <div class="mt-3">
-                <button  type="button" class="btn btn-primary me-md-2">Selesai</button>
-                <button  type="button" class="btn btn-danger">Batal</button>
+                <button  type="button" class="btn btn-primary me-md-2" onClick={(e)=>submit(e)}>Selesai</button>
+                <Link to='/transaksi'>
+                    <button  type="button" class="btn btn-danger">Batal</button>
+                </Link>
             </div>
             </div>
         </Layout>

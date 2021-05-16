@@ -1,9 +1,7 @@
 import React,{useState,useEffect} from 'react';
 import {Layout} from '../layout';
-import {Link,useHistory,useParams} from 'react-router-dom'
-//import service from '../service'
+import {Link} from 'react-router-dom'
 import axios from 'axios';
-//import {Table,Button} from 'reactstrap'
 
 
 const Books = () => {

@@ -6,6 +6,11 @@ const Transaksi = () => {
     const url = 'http://localhost:5000/books';
 
     const [books,setBooks] = useState([]);
+
+    // const infoBuku = {
+    //   tes1 : "1234",
+    //   tes2 : 9000
+    // };
   
     useEffect(()=>{
       fetch(url)
@@ -43,7 +48,7 @@ const Transaksi = () => {
                 <td>{ book.stok}</td>
                 <td>{ book.hargasewa }</td>
                 <td>
-                 <Link to={{pathname:'/detiltrans',state: book.id}}>
+                 <Link to={{pathname:'/detiltrans',state : book}} >
                     <button type="button" class="btn btn-info me-md-2">Pinjam</button>
                  </Link>
                   
